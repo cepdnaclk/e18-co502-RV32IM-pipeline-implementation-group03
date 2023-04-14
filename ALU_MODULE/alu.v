@@ -34,7 +34,35 @@ module alu (DATA1, DATA2, SELECT, RESULT, ZERO);
                 REMU_RESULT,
 			    SLT_RESULT,
                 SLTU_RESULT,
-                FORWARD_RESULT;  
+                FORWARD_RESULT;
+
+
+    assign #2 ADD_RESULT = DATA1 + DATA2;
+    assign #2 SUB_RESULT = DATA1 - DATA2;
+    assign #1 AND_RESULT = DATA1 & DATA2;
+    assign #1 OR_RESULT = DATA1 | DATA2;
+    assign #1 XOR_RESULT = DATA1 ^ DATA2;
+
+    // logical shift    ---> shift left or right, new bits set to 0
+    // arithmatic shift ---> right shift only, new bits set to sign bit
+    assign #1 SLL_RESULT = DATA1 << DATA2;
+    assign #1 SRL_RESULT = DATA1 >> DATA2;
+    assign #1 SRA_RESULT = DATA1 >>> DATA2;
+
+    assign #3 MUL_RESULT = DATA1 * DATA2;  // lower 32 bits of the result
+    assign #3 MULH_RESULT = DATA1 * DATA2; // upper 32 bits of the result
+    assign #3 MULHU_RESULT = $unsigned(DATA1) * $unsigned(DATA2);
+    assign #3 MULHSU_RESULT = $signed(DATA1) * $unsigned(DATA2);
+
+    assign #3 DIV_RESULT = DATA1 / DATA2;
+    assign #3 DIVU_RESULT = $unsigned(DATA1) / $unsigned(DATA2);
+    assign #3 REM_RESULT = DATA1 % DATA2;
+    assign #3 REMU_RESULT = $unsigned(DATA1) % $unsigned(DATA2);
+
+    assign #1 SLT_RESULT = ($signed(DATA1) < $signed(DATA2)) ? 1'b1 : 1'b0;    
+    assign #1 SLTU_RESULT = ($unsigned(DATA1) < $unsigned(DATA2)) ? 1'b1 : 1'b0;
+
+    assign #1 FORWARD_RESULT = DATA1;
 
 
     // TODO: assign correct opcodes
@@ -47,68 +75,76 @@ module alu (DATA1, DATA2, SELECT, RESULT, ZERO);
                 RESULT = ADD_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b00001 : begin 
                 RESULT = SUB_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b00010 : begin 
+                RESULT = AND_RESULT;   
+            end
+
+            5'b00011 : begin 
                 RESULT = OR_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b00100 : begin 
                 RESULT = XOR_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b00101 : begin 
                 RESULT = SLL_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b00110 : begin 
                 RESULT = SRL_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b00111 : begin 
                 RESULT = SRA_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b01000 : begin 
                 RESULT = MUL_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b01001 : begin 
                 RESULT = MULH_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b01010 : begin 
                 RESULT = MULHU_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b01011 : begin 
                 RESULT = MULHSU_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b01100 : begin 
                 RESULT = DIV_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b01101 : begin 
                 RESULT = DIVU_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b01110 : begin 
                 RESULT = REM_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b01111 : begin 
                 RESULT = REMU_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b10000 : begin 
                 RESULT = SLT_RESULT;   
             end
 
-            5'b00000 : begin 
+            5'b10001 : begin 
                 RESULT = SLTU_RESULT;   
+            end
+
+            5'b10010 : begin 
+                RESULT = FORWARD_RESULT;   
             end
 
             default: begin
@@ -116,35 +152,6 @@ module alu (DATA1, DATA2, SELECT, RESULT, ZERO);
             end 
         endcase
     end
-
-
-    // TODO: add time delays
-    assign ADD_RESULT = DATA1 + DATA2;
-    assign SUB_RESULT = DATA1 - DATA2;
-    assign OR_RESULT = DATA1 | DATA2;
-    assign XOR_RESULT = DATA1 ^ DATA2;
-
-    // logical shift    ---> shift left or right, new bits set to 0
-    // arithmatic shift ---> right shift only, new bits set to sign bit
-    assign SLL_RESULT = DATA1 << DATA2;
-    assign SRL_RESULT = DATA1 >> DATA2;
-    assign SRA_RESULT = DATA1 >>> DATA2;
-
-    assign MUL_RESULT = DATA1 * DATA2;  // lower 32 bits of the result
-    assign MULH_RESULT = DATA1 * DATA2; // upper 32 bits of the result
-    assign MULHU_RESULT = $unsigned(DATA1) * $unsigned(DATA2);
-    assign MULHSU_RESULT = $signed(DATA1) * $unsigned(DATA2);
-
-    assign DIV_RESULT = DATA1 / DATA2;
-    assign DIVU_RESULT = $unsigned(DATA1) / $unsigned(DATA2);
-    assign REM_RESULT = DATA1 % DATA2;
-    assign REMU_RESULT = $unsigned(DATA1) % $unsigned(DATA2);
-
-    assign SLT_RESULT = ($signed(DATA1) < $signed(DATA2)) ? 1'b1 : 1'b0;    
-    assign SLTU_RESULT = ($unsigned(DATA1) < $unsigned(DATA2)) ? 1'b1 : 1'b0;
-
-    assign FORWARD_RESULT = DATA1;
-
 
 endmodule
 
