@@ -25,9 +25,6 @@ module alu (DATA1, DATA2, SELECT, RESULT, ZERO);
                 SRL_RESULT,
                 SRA_RESULT,
 			    MUL_RESULT,
-                MULH_RESULT,
-                MULHU_RESULT,
-                MULHSU_RESULT,
 			    DIV_RESULT,
                 DIVU_RESULT,
                 REM_RESULT,
@@ -35,6 +32,10 @@ module alu (DATA1, DATA2, SELECT, RESULT, ZERO);
 			    SLT_RESULT,
                 SLTU_RESULT,
                 FORWARD_RESULT;
+
+    wire [63:0] MULH_RESULT,
+                MULHU_RESULT,
+                MULHSU_RESULT;
 
 
     assign #2 ADD_RESULT = DATA1 + DATA2;
@@ -47,17 +48,17 @@ module alu (DATA1, DATA2, SELECT, RESULT, ZERO);
     // arithmatic shift ---> right shift only, new bits set to sign bit
     assign #1 SLL_RESULT = DATA1 << DATA2;
     assign #1 SRL_RESULT = DATA1 >> DATA2;
-    assign #1 SRA_RESULT = DATA1 >>> DATA2;
+    assign #1 SRA_RESULT = $signed(DATA1) >>> DATA2;
 
     assign #3 MUL_RESULT = DATA1 * DATA2;  // lower 32 bits of the result
     assign #3 MULH_RESULT = DATA1 * DATA2; // upper 32 bits of the result
-    assign #3 MULHU_RESULT = $unsigned(DATA1) * $unsigned(DATA2);
-    assign #3 MULHSU_RESULT = $signed(DATA1) * $unsigned(DATA2);
+    assign #3 MULHU_RESULT = $unsigned(DATA1) * $unsigned(DATA2); // upper 32 bits of the result
+    assign #3 MULHSU_RESULT = $signed(DATA1) * $unsigned(DATA2); // upper 32 bits of the result
 
-    assign #3 DIV_RESULT = DATA1 / DATA2;
-    assign #3 DIVU_RESULT = $unsigned(DATA1) / $unsigned(DATA2);
-    assign #3 REM_RESULT = DATA1 % DATA2;
-    assign #3 REMU_RESULT = $unsigned(DATA1) % $unsigned(DATA2);
+    assign #3 DIV_RESULT = $signed(DATA1) / $signed(DATA2);
+    assign #3 DIVU_RESULT = DATA1 / DATA2;
+    assign #3 REM_RESULT = $signed(DATA1) % $signed(DATA2);
+    assign #3 REMU_RESULT = DATA1 % DATA2;
 
     assign #1 SLT_RESULT = ($signed(DATA1) < $signed(DATA2)) ? 1'b1 : 1'b0;    
     assign #1 SLTU_RESULT = ($unsigned(DATA1) < $unsigned(DATA2)) ? 1'b1 : 1'b0;
@@ -108,15 +109,15 @@ module alu (DATA1, DATA2, SELECT, RESULT, ZERO);
             end
 
             5'b01001 : begin 
-                RESULT = MULH_RESULT;   
+                RESULT = MULH_RESULT[63:32];   
             end
 
             5'b01010 : begin 
-                RESULT = MULHU_RESULT;   
+                RESULT = MULHU_RESULT[63:32];   
             end
 
             5'b01011 : begin 
-                RESULT = MULHSU_RESULT;   
+                RESULT = MULHSU_RESULT[63:32];   
             end
 
             5'b01100 : begin 
