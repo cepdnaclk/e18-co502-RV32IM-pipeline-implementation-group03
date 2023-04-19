@@ -34,13 +34,14 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
         begin
         instr_type = 4'b0000;
         IMM_SEL = 3'b011;
-        //OP1SEL = 1'bx;
-        //OP2SEL = 1'b1;
+        OP1SEL = 1'bx;
+        OP2SEL = 1'b0;
         MEM_WRITE = 1'b0;
         MEM_READ = 1'b0;
         REG_WRITE_EN = 1'b1;
         WB_SEL = 1'b0;
         BRANCH_JUMP = 2'b00;
+        JAL_SEL = 1'b0;
         end
         
         //AUIPC
@@ -48,13 +49,14 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
         begin
         instr_type = 4'b0001;
         IMM_SEL = 3'b011;
-        //OP1SEL = 1'bx;
-        //OP2SEL = 1'b1;
+        OP1SEL = 1'b0;
+        OP2SEL = 1'b0;
         MEM_WRITE = 1'b0;
         MEM_READ = 1'b0;
         REG_WRITE_EN = 1'b1;
         WB_SEL = 1'b0;
         BRANCH_JUMP = 2'b00;
+        JAL_SEL = 1'b0;
         end
         
         //JAL
@@ -62,13 +64,14 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
         begin
         instr_type = 4'b0010;
         IMM_SEL = 3'b100;
-        //OP1SEL = 1'bx;
-        //OP2SEL = 1'b1;
+        OP1SEL = 1'b0;
+        OP2SEL = 1'b0;
         MEM_WRITE = 1'b0;
         MEM_READ = 1'b0;
         REG_WRITE_EN = 1'b1;
         WB_SEL = 1'b0;
         BRANCH_JUMP = 2'b01;
+        JAL_SEL = 1'b1;
         end
         
         //JALR
@@ -76,13 +79,14 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
         begin
         instr_type = 4'b0011;
         IMM_SEL = 3'b100;
-        //OP1SEL = 1'bx;
-        //OP2SEL = 1'b1;
+        OP1SEL = 1'b0;
+        OP2SEL = 1'b0;
         MEM_WRITE = 1'b0;
         MEM_READ = 1'b0;
         REG_WRITE_EN = 1'b1;
         WB_SEL = 1'b0;
         BRANCH_JUMP = 2'b01;
+        JAL_SEL = 1'b1;
         end
         
         /*-----B TYPE-----
@@ -91,13 +95,14 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
         begin
         instr_type = 4'b0100;
         IMM_SEL = 3'b000;
-        //OP1SEL = 1'bx;
-        //OP2SEL = 1'b1;
+        OP1SEL = 1'b0;
+        OP2SEL = 1'b0;
         MEM_WRITE = 1'b0;
         MEM_READ = 1'b0;
         REG_WRITE_EN = 1'b0;
         WB_SEL = 1'bx;
         BRANCH_JUMP = 2'b10;
+        JAL_SEL = 1'b0;
         end
         
         /*-----L TYPE-----
@@ -106,12 +111,13 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
         begin
         instr_type = 4'b0101;
         IMM_SEL = 3'b001;
-        //OP1SEL = 1'bx;
-        //OP2SEL = 1'b1;
+        OP1SEL = 1'b1;
+        OP2SEL = 1'b1;
         MEM_READ = 1'b1;
         REG_WRITE_EN = 1'b1;
         WB_SEL = 1'b1;
         BRANCH_JUMP = 2'b00;
+        JAL_SEL = 1'b0;
         end
         
         /*-----S TYPE-----
@@ -120,13 +126,14 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
         begin
         instr_type = 4'b0110;
         IMM_SEL = 3'b101;
-        //OP1SEL = 1'bx;
-        //OP2SEL = 1'b1;
+        OP1SEL = 1'b1;
+        OP2SEL = 1'b1;
         MEM_WRITE = 1'b1;
         MEM_READ = 1'b0;
         REG_WRITE_EN = 1'b0;
         WB_SEL = 1'bx;
         BRANCH_JUMP = 2'b00;
+        JAL_SEL = 1'b0;
         end
         
         /*-----I TYPE-----
@@ -135,13 +142,14 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
         begin
         instr_type = 4'b0111;
         IMM_SEL = 3'b011;
-        //OP1SEL = 1'bx;
-        //OP2SEL = 1'b1;
+        OP1SEL = 1'b1;
+        OP2SEL = 1'b1;
         MEM_WRITE = 1'b0;
         MEM_READ = 1'b0;
         REG_WRITE_EN = 1'b1;
         WB_SEL = 1'b0;
         BRANCH_JUMP = 2'b00;
+        JAL_SEL = 1'b0;
         end
         
         /*-----R TYPE-----
@@ -150,13 +158,14 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
         begin
         instr_type = 4'b1000;
         IMM_SEL = 3'b011;
-        //OP1SEL = 1'bx;
-        //OP2SEL = 1'b1;
+        OP1SEL = 1'b1;
+        OP2SEL = 1'b1;
         MEM_WRITE = 1'b0;
         MEM_READ = 1'b0;
         REG_WRITE_EN = 1'b1;
         WB_SEL = 1'b0;
         BRANCH_JUMP = 2'b00;
+        JAL_SEL = 1'b0;
         end
         
         endcase
@@ -174,7 +183,7 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
         
         9'bxxxxx0000:
         begin
-        ALUOP = 5'bxxxxx;
+        ALUOP = 5'b10010;
         end
         
         9'bxxxxx0001:
