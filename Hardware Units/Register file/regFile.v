@@ -37,6 +37,11 @@ module reg_file(
         #2;
         OUT1 = regFile[OUT1ADDRESS];
         OUT2 = regFile[OUT2ADDRESS];
+
+         for(i = 0; i < 32; i++)
+            begin
+                $display(regFile[i]);
+            end
         
     end
     
@@ -46,9 +51,10 @@ endmodule
 module reg_file_tb;
     
     reg [31:0] WRITEDATA;
-    reg [5:0] WRITEREG, READREG1, READREG2;
+    reg [4:0] WRITEREG, READREG1, READREG2;
     reg CLK, RESET, WRITEENABLE; 
     wire [31:0] REGOUT1, REGOUT2;
+    integer i;
     
     reg_file r1(.IN(WRITEDATA), .OUT1(REGOUT1), .OUT2(REGOUT2), 
         .INADDRESS(WRITEREG), .OUT1ADDRESS(READREG1), .OUT2ADDRESS(READREG2), .WRITE(WRITEENABLE), .CLOCK(CLK), .RESET(RESET)
@@ -65,6 +71,7 @@ module reg_file_tb;
         // assign values with time to input signals to see output 
         RESET = 1'b0;
         WRITEENABLE = 1'b0;
+        
         
         #5
         RESET = 1'b1;
@@ -126,80 +133,3 @@ module reg_file_tb;
 endmodule
 
 
-/* module testBench;
-    reg [7:0]IN;
-    wire [7:0]OUT1, OUT2;
-    reg [2:0]INADDRESS, OUT1ADDRESS, OUT2ADDRESS; 
-    reg WRITE, CLOCK, RESET;
-
-
-    reg_file r1(.IN(IN), .OUT1(OUT1), .OUT2(OUT2), .INADDRESS(INADDRESS), .OUT1ADDRESS(OUT1ADDRESS), .OUT2ADDRESS(OUT2ADDRESS), .WRITE(WRITE), .CLOCK(CLOCK), .RESET(RESET));
-
-    initial 
-    begin
-        
-        WRITE = 0;
-        CLOCK = 1;
-        RESET = 0;
-        $monitor ("register%d = %d\t register%d = %d",OUT1ADDRESS, OUT1, OUT2ADDRESS, OUT2);
-
-        #5;
-        RESET = 1;
-
-
-
-        /* #1;
-        WRITE = 1;
-        RESET = 0;
-        IN = 8'd20;
-        INADDRESS = 3'd0;
-
-        #2;
-        IN = 8'd25;
-        INADDRESS = 3'd1;
-
-        #2;
-        IN = 8'd200;
-        INADDRESS = 3'd2;
-
-        #2;
-        IN = 8'd255;
-        INADDRESS = 3'd3;
-
-        #2;
-        IN = 8'd70;
-        INADDRESS = 3'd4;
-
-        #2;
-        IN = 8'd56;
-        INADDRESS = 3'd5;
-
-        #2;
-        IN = 8'd100;
-        INADDRESS = 3'd6;
-
-        #2;
-        IN = 8'd150;
-        INADDRESS = 3'd7;
-
-        #2;
-        WRITE = 0;
-        OUT1ADDRESS = 3'd0;
-        OUT2ADDRESS = 3'd2;
-
-        #2;
-        OUT1ADDRESS = 3'd1;
-        OUT2ADDRESS = 3'd7;
-
-
-        #1;
-        RESET = 1;
-        
-        #3;
-        $finish; */
-    /* end
-
-    always CLOCK = #5 ~CLOCK;
-
-
-endmodule */
