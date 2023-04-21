@@ -29,7 +29,7 @@ module controlUnit(OPCODE,funct3,funct7_A,funct7_B,BUSY_WAIT,ALUOP,REG_WRITE_EN,
     //this block excutes when INSTRUCTION changes
     always @ (OPCODE)
     begin        
-        #1;                            //latency of 1 time unit to decode the INSTRUCTION and generate the control signals
+        #1                            //latency of 1 time unit to decode the INSTRUCTION and generate the control signals
         case(OPCODE)
 
 	//LUI
@@ -177,12 +177,11 @@ module controlUnit(OPCODE,funct3,funct7_A,funct7_B,BUSY_WAIT,ALUOP,REG_WRITE_EN,
     
     assign specific_OP = {funct7_A,funct7_B,funct3,instr_type};
     
-    
-    always @(specific_OP) 
+    always @(*) 
     	begin
-    	
-    	#1; 
-        case(specific_OP)
+    	#1
+
+        casex(specific_OP)
         
         9'bxxxxx0000:
         begin
@@ -383,6 +382,10 @@ module controlUnit(OPCODE,funct3,funct7_A,funct7_B,BUSY_WAIT,ALUOP,REG_WRITE_EN,
         begin
         ALUOP = 5'b01111;
         end
+
+        default: begin
+        ALUOP = 5'bxxxxx;
+        end 
 	
         endcase
     end
