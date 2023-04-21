@@ -6,13 +6,13 @@ module instruction_memory(
 	read,
     address,
     readinst,
-	busywait
+	// busywait
 );
 input				clock;
 input				read;
 input[5:0]			address;
 output reg [127:0]	readinst;
-output	reg	[0:0]	busywait;
+// output	reg	[0:0]	busywait;
 
 reg readaccess;
 
@@ -23,17 +23,17 @@ reg [7:0] memory_array [1023:0];
 
 initial
 begin
-	busywait = 0;
+	// busywait = 0;
 	readaccess = 0;
 	// $readmemb("instr_mem.mem", memory_array); 
-	
+
 	// instrutions can be loaded from file or can be harcodeded to the memory module
 end
 
 //Detecting an incoming memory access
 always @(read)
 begin
-    busywait = (read)? 1 : 0;
+    // busywait = (read)? 1 : 0;
     readaccess = (read)? 1 : 0;
 end
 
@@ -58,7 +58,7 @@ always @(posedge clock)
 		readinst[111:104] = #40 memory_array[{address,4'b1101}];
 		readinst[119:112] = #40 memory_array[{address,4'b1110}];
 		readinst[127:120] = #40 memory_array[{address,4'b1111}];
-		busywait = 0;
+		// busywait = 0;
 		readaccess = 0;
 	end
 end
