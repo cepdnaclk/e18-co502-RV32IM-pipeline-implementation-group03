@@ -1,19 +1,22 @@
 //Control Unit module
 
-module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SEL,OP2SEL,MEM_WRITE,MEM_READ,WB_SEL,BRANCH_JUMP);
+module controlUnit(OPCODE,funct3,funct7_A,funct7_B,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SEL,OP2SEL,MEM_WRITE,MEM_READ,WB_SEL,BRANCH_JUMP,JAL_SEL);
     //port declarations
-    input [31:0] INSTRUCTION;
-    input [7:0] OPCODE;
+    //input [31:0] INSTRUCTION;
+    input [6:0] OPCODE;
+    input [2:0] funct3;
+    input funct7_A, funct7_B;
     input BUSY_WAIT;
     
     //Output signals
-    output reg REG_WRITE_EN, OP1SEL, OP2SEL, MEM_WRITE, MEM_READ, WB_SEL;
+    output reg REG_WRITE_EN, OP1SEL, OP2SEL, MEM_WRITE, MEM_READ, WB_SEL, JAL_SEL;
     output reg [2:0] IMM_SEL;
     output reg [4:0]ALUOP;
     output reg [1:0]BRANCH_JUMP;
     
     reg [3:0] instr_type;
-    wire [6:0] opcode;
+    
+    /*wire [6:0] opcode;
     wire [2:0] funct3;
     wire funct7_A,funct7_B;
          
@@ -21,10 +24,10 @@ module controlUnit(INSTRUCTION,OPCODE,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SE
     assign opcode = Instruction[6:0];                       //opcode
     assign funct3 = Instruction[14:12];                     //funct3 field
     assign funct7_A = Instruction[30];                      //7th bit of funct7
-    assign funct7_B = Instruction[25];
+    assign funct7_B = Instruction[25];*/
   
     //this block excutes when INSTRUCTION changes
-    always @ (opcode)
+    always @ (OPCODE)
     begin        
         #1;                            //latency of 1 time unit to decode the INSTRUCTION and generate the control signals
         case(OPCODE)
