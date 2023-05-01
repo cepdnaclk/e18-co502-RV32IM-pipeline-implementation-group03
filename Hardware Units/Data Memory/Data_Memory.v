@@ -11,7 +11,7 @@ module data_memory(
     address,
     writedata,
     readdata,
-	busywait
+	// busywait
 );
 input				clock;
 input           	reset;
@@ -20,7 +20,7 @@ input           	write;
 input[5:0]      	address;
 input[31:0]     	writedata;
 output reg [31:0]	readdata;
-output reg  [0:0]    	busywait;
+// output reg  [0:0]    	busywait;
 
 //Declare memory array 256x8-bits 
 reg [7:0] memory_array [255:0];
@@ -30,7 +30,7 @@ integer i;
 reg readaccess, writeaccess;
 always @(read, write)
 begin
-	busywait = (read || write)? 1 : 0;
+	// busywait = (read || write)? 1 : 0;
 	readaccess = (read && !write)? 1 : 0;
 	writeaccess = (!read && write)? 1 : 0;
 end
@@ -53,7 +53,7 @@ begin
 		memory_array[{address,2'b01}] = #40 writedata[15:8];
 		memory_array[{address,2'b10}] = #40 writedata[23:16];
 		memory_array[{address,2'b11}] = #40 writedata[31:24];
-		busywait = 0;
+		// busywait = 0;
 		writeaccess = 0;
 	end
 end
@@ -66,7 +66,7 @@ begin
         for (i=0;i<256; i=i+1)
             memory_array[i] = 0;
         
-        busywait = 0;
+        // busywait = 0;
 		readaccess = 0;
 		writeaccess = 0;
     end
