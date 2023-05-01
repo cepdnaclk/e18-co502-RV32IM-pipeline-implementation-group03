@@ -3,7 +3,7 @@ module imm_sign_extend (INSTRUCTION, U_IMM, J_IMM, I_IMM, S_IMM, B_IMM);
 input  [31:0] INSTRUCTION;
 output [31:0] U_IMM, J_IMM, I_IMM, S_IMM, B_IMM;
 
-
+#1
 // sign extention imidiate value for U type 
 assign U_IMM = { INSTRUCTION[31:12], {12{1'b0}} };
 
