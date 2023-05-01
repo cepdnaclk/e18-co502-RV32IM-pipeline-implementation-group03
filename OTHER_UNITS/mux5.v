@@ -8,16 +8,16 @@ module mux5(ALUOUT, DATA_MEM, WB_SEL, MUX5_OUT);
 
 	always @(WB_SEL) 
 	begin
+		#1
 		case(WB_SEL)
 		
-		1'b0:begin
-		MUX5_OUT = ALUOUT;
-		end
+			1'b0:begin
+				MUX5_OUT = ALUOUT;
+			end
 		
-		1'b1:begin
-		MUX5_OUT = DATA_MEM;
-		end
-		
+			1'b1:begin
+				MUX5_OUT = DATA_MEM;
+			end
 		endcase		
 	end
 
