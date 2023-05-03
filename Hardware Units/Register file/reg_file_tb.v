@@ -1,52 +1,4 @@
-module reg_file(
-    input [31:0]IN,
-    output reg  [31:0] OUT1, OUT2, 
-    input wire [4:0] INADDRESS, OUT1ADDRESS, OUT2ADDRESS, 
-    input WRITE, CLOCK, RESET
-    );
-
-    reg [31:0] regFile [0:31];    // 32 bit registers
-    integer i;
-
-    always @(posedge CLOCK)
-    begin 
-        if(RESET)
-        begin
-            for(i = 0; i < 32; i++)
-            begin
-                regFile[i] = 32'd0;
-            end
-            #1;
-        end
-
-        else if(WRITE)
-        begin
-            #1;
-            regFile[INADDRESS] = IN;
-        end
-
-        begin
-            #2;
-            OUT1 = regFile[OUT1ADDRESS];
-            OUT2 = regFile[OUT2ADDRESS];
-        end
-    end
-
-    always @(OUT1ADDRESS, OUT2ADDRESS)
-    begin
-        #2;
-        OUT1 = regFile[OUT1ADDRESS];
-        OUT2 = regFile[OUT2ADDRESS];
-
-         for(i = 0; i < 32; i++)
-            begin
-                $display(regFile[i]);
-            end
-        
-    end
-    
-
-endmodule 
+`include "reg_file.v"
 
 module reg_file_tb;
     
@@ -60,8 +12,7 @@ module reg_file_tb;
         .INADDRESS(WRITEREG), .OUT1ADDRESS(READREG1), .OUT2ADDRESS(READREG2), .WRITE(WRITEENABLE), .CLOCK(CLK), .RESET(RESET)
         );
        
-    initial
-    begin
+    initial begin
         CLK = 1'b1;
         
         // generate files needed to plot the waveform using GTKWave
@@ -131,5 +82,3 @@ module reg_file_tb;
         
 
 endmodule
-
-
