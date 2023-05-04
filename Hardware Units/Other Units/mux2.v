@@ -8,16 +8,16 @@ module mux2(DATA1, PC, OP1_SEL, MUX2_OUT);
 
 	always @(OP1_SEL) 
 	begin
+		#1
 		case(OP1_SEL)
 		
-		1'b0:begin
-		MUX2_OUT = PC;
-		end
+			1'b0:begin
+				MUX2_OUT = PC;
+			end
 		
-		1'b1:begin
-		MUX2_OUT = DATA1;
-		end
-		
+			1'b1:begin
+				MUX2_OUT = DATA1;
+			end
 		endcase		
 	end
 
