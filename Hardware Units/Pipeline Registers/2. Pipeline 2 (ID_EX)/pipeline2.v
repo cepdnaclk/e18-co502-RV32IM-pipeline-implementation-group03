@@ -101,6 +101,7 @@ module pipeline2(
     always @(posedge CLK)
     begin
         if (!reset) begin
+            #1;
             OUT_write_add <= IN_write_addr;
             OUT_pc_plus_4 <= IN_pc_plus_4;
             OUT_pc <= IN_pc;
