@@ -1,3 +1,5 @@
 *.vvp
 *.vcd
 *.gtkw
+single_cycle.v
+test_cpu.v
