@@ -1,5 +1,4 @@
-
-//Data memeory
+//Data memory
 
 `timescale  1ns/100ps
 
