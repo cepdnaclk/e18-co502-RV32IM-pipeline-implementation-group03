@@ -4,71 +4,98 @@
 `timescale  1ns/100ps
 
 module data_memory(
-	clock,
-    reset,
-    read,
-    write,
-    address,
-    writedata,
-    readdata,
-	// busywait
+	CLOCK,
+    RESET,
+    READ,
+    WRITE,
+    ADDRESS,
+    WRITEDATA,
+    READDATA,
+	BUSYWAIT
 );
-input				clock;
-input           	reset;
-input           	read;
-input           	write;
-input[5:0]      	address;
-input[31:0]     	writedata;
-output reg [31:0]	readdata;
-// output reg  [0:0]    	busywait;
+input				CLOCK;
+input           	RESET;
+input           	MEMREAD;
+input           	MEMWRITE;
+input[27:0]      	ADDRESS;
+input[127:0]     	WRITEDATA;
+output reg [127:0]	READDATA;
+output reg BUSYWAIT;
 
 //Declare memory array 256x8-bits 
-reg [31:0] memory_array [255:0];
+reg [127:0] memoryArray [1024:0];
 integer i;
 
 //Detecting an incoming memory access
-reg readaccess, writeaccess;
-always @(read, write)
+reg READACCESS, WRITEACCESS;
+always @(MEMREAD, MEMWRITE)
 begin
-	// busywait = (read || write)? 1 : 0;
-	readaccess = (read && !write)? 1 : 0;
-	writeaccess = (!read && write)? 1 : 0;
+	BUSYWAIT = (MEMREAD || MEMWRITE)? 1 : 0;
+	READACCESS = (MEMREAD && !MEMWRITE)? 1 : 0;
+	WRITEACCESS = (!MEMREAD && MEMWRITE)? 1 : 0;
 end
 
 //Reading & writing
-always @(posedge clock)
+always @(posedge CLOCK)
 begin
-	if(readaccess)
+	if(READACCESS)
 	begin
-		readdata[7:0]   = #40 memory_array[{address,2'b00}];
-		readdata[15:8]  = #40 memory_array[{address,2'b01}];
-		readdata[23:16] = #40 memory_array[{address,2'b10}];
-		readdata[31:24] = #40 memory_array[{address,2'b11}];
-		busywait = 0;
-		readaccess = 0;
+		READDATA[7:0]     = #40 memoryArray[{ADDRESS,4'b0000}];
+        READDATA[15:8]    = #40 memoryArray[{ADDRESS,4'b0001}];
+        READDATA[23:16]   = #40 memoryArray[{ADDRESS,4'b0010}];
+        READDATA[31:24]   = #40 memoryArray[{ADDRESS,4'b0011}];
+        READDATA[39:32]   = #40 memoryArray[{ADDRESS,4'b0100}];
+        READDATA[47:40]   = #40 memoryArray[{ADDRESS,4'b0101}];
+        READDATA[55:48]   = #40 memoryArray[{ADDRESS,4'b0110}];
+        READDATA[63:56]   = #40 memoryArray[{ADDRESS,4'b0111}];
+        READDATA[71:64]   = #40 memoryArray[{ADDRESS,4'b1000}];
+        READDATA[79:72]   = #40 memoryArray[{ADDRESS,4'b1001}];
+        READDATA[87:80]   = #40 memoryArray[{ADDRESS,4'b1010}];
+        READDATA[95:88]   = #40 memoryArray[{ADDRESS,4'b1011}];
+        READDATA[103:96]  = #40 memoryArray[{ADDRESS,4'b1100}];
+        READDATA[111:104] = #40 memoryArray[{ADDRESS,4'b1101}];
+        READDATA[119:112] = #40 memoryArray[{ADDRESS,4'b1110}];
+        READDATA[127:120] = #40 memoryArray[{ADDRESS,4'b1111}];
+        
+		BUSYWAIT = 0;
+		READACCESS = 0;
 	end
-	if(writeaccess)
+
+	if(WRITEACCESS)
 	begin
-		memory_array[{address,2'b00}] = #40 writedata[7:0];
-		memory_array[{address,2'b01}] = #40 writedata[15:8];
-		memory_array[{address,2'b10}] = #40 writedata[23:16];
-		memory_array[{address,2'b11}] = #40 writedata[31:24];
-		// busywait = 0;
-		writeaccess = 0;
+		memoryArray[{ADDRESS,4'b0000}] = #40 WRITEDATA[7:0]    ;
+        memoryArray[{ADDRESS,4'b0001}] = #40 WRITEDATA[15:8]   ;
+        memoryArray[{ADDRESS,4'b0010}] = #40 WRITEDATA[23:16]  ;
+        memoryArray[{ADDRESS,4'b0011}] = #40 WRITEDATA[31:24]  ;
+        memoryArray[{ADDRESS,4'b0100}] = #40 WRITEDATA[39:32]  ;
+        memoryArray[{ADDRESS,4'b0101}] = #40 WRITEDATA[47:40]  ;
+        memoryArray[{ADDRESS,4'b0110}] = #40 WRITEDATA[55:48]  ;
+        memoryArray[{ADDRESS,4'b0111}] = #40 WRITEDATA[63:56]  ;
+        memoryArray[{ADDRESS,4'b1000}] = #40 WRITEDATA[71:64]  ;
+        memoryArray[{ADDRESS,4'b1001}] = #40 WRITEDATA[79:72]  ;
+        memoryArray[{ADDRESS,4'b1010}] = #40 WRITEDATA[87:80]  ;
+        memoryArray[{ADDRESS,4'b1011}] = #40 WRITEDATA[95:88]  ;
+        memoryArray[{ADDRESS,4'b1100}] = #40 WRITEDATA[103:96] ;
+        memoryArray[{ADDRESS,4'b1101}] = #40 WRITEDATA[111:104];
+        memoryArray[{ADDRESS,4'b1110}] = #40 WRITEDATA[119:112];
+        memoryArray[{ADDRESS,4'b1111}] = #40 WRITEDATA[127:120];
+   
+   		BUSYWAIT = 0;
+		WRITEACCESS = 0;
 	end
 end
 
-//Reset memory
-always @(posedge reset)
+//RESET memory
+always @(posedge RESET)
 begin
-    if (reset)
+    if (RESET)
     begin
-        for (i=0;i<256; i=i+1)
-            memory_array[i] = 0;
+        for (i=0;i<1024; i=i+1)
+            memoryArray[i] = 0;
         
-        // busywait = 0;
-		readaccess = 0;
-		writeaccess = 0;
+        BUSYWAIT = 0;
+		READACCESS = 0;
+		WRITEACCESS = 0;
     end
 end
 
