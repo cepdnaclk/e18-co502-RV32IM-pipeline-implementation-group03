@@ -1,5 +1,6 @@
 module pipeline2(
     IN_write_addr,
+    IN_funct3,
     IN_pc_plus_4,
     IN_pc,
     IN_data1,
@@ -15,6 +16,7 @@ module pipeline2(
     IN_wbsel,
     IN_reg_write_en,
     OUT_write_addr,
+    OUT_funct3,
     OUT_pc_plus_4,
     OUT_pc,
     OUT_data1,
@@ -64,12 +66,14 @@ module pipeline2(
 
     // Port declaration
     input [4:0] IN_write_addr, IN_aluop;
+    input [2:0] IN_funct3;
     input [1:0] IN_branch_jump;
     input [31:0] IN_pc_plus_4, IN_pc, IN_data1, IN_data2, IN_immediate;            
     input  IN_op1sel, IN_op2sel, IN_jalsel, IN_mem_write, IN_mem_read, IN_wbsel, IN_reg_write_en;
     input clk, reset, busywait;
 
     output reg [4:0] OUT_write_addr, OUT_aluop;
+    output reg [2:0] OUT_funct3;
     output reg [1:0] OUT_branch_jump;
     output reg [31:0] OUT_pc_plus_4, OUT_pc, IN_data1, OUT_data2, OUT_immediate;            
     output reg  OUT_op1sel, OUT_op2sel, OUT_jalsel, OUT_mem_write, OUT_mem_read, OUT_wbsel, OUT_reg_write_en;
@@ -79,6 +83,7 @@ module pipeline2(
         if (reset) begin
             #1;
             OUT_write_add = 5'd0;
+            OUT_funct3 = 3'd0;
             OUT_pc_plus_4 = 32'd0;
             OUT_pc = 32'd0;
             OUT_data1 = 32'd0;
@@ -104,6 +109,7 @@ module pipeline2(
         if (!reset & !busywait) begin
             #1;
             OUT_write_add <= IN_write_addr;
+            OUT_funct3 <= IN_funct3;
             OUT_pc_plus_4 <= IN_pc_plus_4;
             OUT_pc <= IN_pc;
             OUT_data1 <= IN_data1;
