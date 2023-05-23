@@ -30,7 +30,8 @@ module pipeline2(
     OUT_wbsel,
     OUT_reg_write_en,
     clk,
-    reset
+    reset,
+    busywait
 
     // IN_INSTRUCTION, // INSTRUCTION [11:7]
     // IN_PC,
@@ -66,7 +67,7 @@ module pipeline2(
     input [1:0] IN_branch_jump;
     input [31:0] IN_pc_plus_4, IN_pc, IN_data1, IN_data2, IN_immediate;            
     input  IN_op1sel, IN_op2sel, IN_jalsel, IN_mem_write, IN_mem_read, IN_wbsel, IN_reg_write_en;
-    input clk, reset;
+    input clk, reset, busywait;
 
     output reg [4:0] OUT_write_addr, OUT_aluop;
     output reg [1:0] OUT_branch_jump;
@@ -100,7 +101,7 @@ module pipeline2(
     // timing ????
     always @(posedge CLK)
     begin
-        if (!reset) begin
+        if (!reset & !busywait) begin
             #1;
             OUT_write_add <= IN_write_addr;
             OUT_pc_plus_4 <= IN_pc_plus_4;
