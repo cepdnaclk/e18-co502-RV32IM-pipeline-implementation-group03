@@ -6,12 +6,13 @@ module pipeline1 (
     OUT_pc,
     OUT_instruction,
     clk,
-    reset
+    reset,
+    busywait
 );
 
 // Port declaration
 input [31:0] IN_pc_plus_4, IN_pc, IN_instruction;
-input clk,reset;
+input clk,reset,busywait;
 output reg [31:0] OUT_pc_plus_4, OUT_pc, OUT_instruction;
 
 // Reset the pipeline register
@@ -27,7 +28,7 @@ end
 // write to privious stage values to the pipeline registers on the positive clock edge
 // timing ????
 always @(posedge CLK) begin
-    if(!reset) begin
+    if(!reset & !busywait) begin
         #1;
         OUT_pc_plus_4 <= IN_pc_plus_4;
         OUT_pc <= IN_pc;
