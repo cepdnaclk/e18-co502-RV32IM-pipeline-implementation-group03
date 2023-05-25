@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module mux2(DATA1, PC, OP1_SEL, MUX2_OUT);
 
 	//0-PC  1-DATA1

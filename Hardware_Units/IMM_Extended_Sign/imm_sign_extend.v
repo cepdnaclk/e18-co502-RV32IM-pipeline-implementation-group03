@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module imm_sign_extend (INSTRUCTION, U_IMM, J_IMM, I_IMM, S_IMM, B_IMM);
 
 input  [31:0] INSTRUCTION;

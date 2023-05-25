@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module reg_file(
     input [31:0]IN,
     output reg  [31:0] OUT1, OUT2, 
