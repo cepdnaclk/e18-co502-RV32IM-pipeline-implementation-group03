@@ -3,3 +3,4 @@
 *.gtkw
 single_cycle.v
 test_cpu.v
+test_testbench.v

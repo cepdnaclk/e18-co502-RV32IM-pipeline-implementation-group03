@@ -11,12 +11,25 @@
 `include "Pipeline_Registers/Pipeline_3_EX_MEM/pipeline3.v"
 `include "Pipeline_Registers/Pipeline_4_MEM_WB/pipeline4.v"
 `include "Program_Counter/PC.v"
+
 `include "Register_file/reg_file.v"
 `include "Other_Units/mux1.v"
 `include "Other_Units/mux2.v"
 `include "Other_Units/mux3.v"
 `include "Other_Units/mux4.v"
 `include "Other_Units/mux5.v"
+
+
+module CPU (RESET,CLK,);
+
+
+//Stage 1 - Instruction Fetching
+
+mux1 PC_Select_Mux(BR_J_PC, PC_4, PC_SEL, MUX1_OUT);
+PC Program_Counter(CLK,RESET,mux_output,PC,busyWait);
+
+    
+endmodule
 
 
 
