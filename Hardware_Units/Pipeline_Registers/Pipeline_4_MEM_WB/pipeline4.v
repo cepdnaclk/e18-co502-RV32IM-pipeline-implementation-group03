@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module pipeline3 (
     IN_write_addr,
     IN_mux4_out,

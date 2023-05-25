@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module pipeline1 (
     IN_pc_plus_4,
     IN_pc,

@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module mux4(ALUOUT, PC_4, JAL_SEL, MUX4_OUT);
 
 	//0-PC_4  1-BR_J_PC

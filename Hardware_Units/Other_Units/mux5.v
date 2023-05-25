@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module mux5(ALUOUT, DATA_MEM, WB_SEL, MUX5_OUT);
 
 	//0-ALUOUT 1-DATA_MEM
