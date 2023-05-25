@@ -1,5 +1,5 @@
 // Create the ALU module
-module alu (DATA1, DATA2, SELECT, RESULT, ZERO);
+module alu (DATA1, DATA2, SELECT, RESULT, zero_signal, sign_bit_signal, sltu_bit_signal);
 
     /* Port Declaration */
 
@@ -12,8 +12,7 @@ module alu (DATA1, DATA2, SELECT, RESULT, ZERO);
     // 32-bit reg bus for the output result
     output reg [31:0] RESULT;
 
-    // To check wheather the alu inputs are equal or not
-    output reg ZERO;
+    output reg zero_signal,sign_bit_signal,sltu_bit_signal;
 
     // 32-bit wires to get the result 
     wire [31:0] ADD_RESULT,
@@ -154,6 +153,9 @@ module alu (DATA1, DATA2, SELECT, RESULT, ZERO);
         endcase
     end
 
+	assign zero_signal= ~(|RESULT);  //zero flag set when data 1 and data 2 is equal(Z flag)
+	assign sign_bit_signal=RESULT[31]; //sign bit  (G flag)
+	assign sltu_bit_signal=SLTU[0];	 // zeroth bit of sltu operation (K flag)
+
+
 endmodule
-
-
