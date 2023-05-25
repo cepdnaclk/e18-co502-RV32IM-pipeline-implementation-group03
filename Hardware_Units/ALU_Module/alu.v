@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 // Create the ALU module
 module alu (DATA1, DATA2, SELECT, RESULT, zero_signal, sign_bit_signal, sltu_bit_signal);
 

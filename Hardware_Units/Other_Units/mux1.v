@@ -1,5 +1,7 @@
-module mux1(BR_J_PC, PC_4, PC_SEL, MUX1_OUT);
+`timescale  1ns/100ps
 
+module mux1(BR_J_PC, PC_4, PC_SEL, MUX1_OUT);
+`timescale  1ns/100ps
 	//0-PC_4  1-BR_J_PC
 	input[31:0] BR_J_PC, PC_4;
 	input PC_SEL;

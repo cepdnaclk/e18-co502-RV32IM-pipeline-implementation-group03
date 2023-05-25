@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 //Control Unit module
 
 module controlUnit(OPCODE,funct3,funct7_A,funct7_B,BUSY_WAIT,ALUOP,REG_WRITE_EN,IMM_SEL,OP1SEL,OP2SEL,MEM_WRITE,MEM_READ,WB_SEL,BRANCH_JUMP,JAL_SEL);

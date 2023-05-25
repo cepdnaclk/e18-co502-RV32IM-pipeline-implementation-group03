@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module mux3(DATA2, IMM, OP2_SEL, MUX3_OUT);
 
 	//0-IMM  1-DATA2

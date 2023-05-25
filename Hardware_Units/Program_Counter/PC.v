@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module programeCounter(CLK,RESET,mux_output,PC,busyWait);
 input CLK,RESET,busyWait;
 input [31:0] mux_output;
