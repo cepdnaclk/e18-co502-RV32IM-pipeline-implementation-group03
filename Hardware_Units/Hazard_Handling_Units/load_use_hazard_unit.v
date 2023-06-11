@@ -1,60 +1,56 @@
 `timescale  1ns/100ps
 
 module Load_use_hazard_unit (
-    clk,
-    reset,
-    load_signal,
-    Memstage_Rd,
-    // IFstage_Rs1,
-    // IFstage_Rs2,
-    ALustage_Rs1,
-    ALustage_Rs2,
-    enable_rs1_forward_from_wb,
-    enable_rs2_forward_from_wb,
-    enable_bubble
+    CLK,
+    RESET,
+    LOAD_SIG,
+    MEM_Rd
+    CLK,
+    RESET,
+    LOAD_SIG,
+    MEM_Rd,
+    ALU_RS1,
+    ALU_RS2,
+    FRWD_RS1_WB,
+    FRWD_RS2_WB,
+    BUBBLE
 );
 
-input clk,reset,load_signal;
-input [4:0] Memstage_Rd,IFstage_Rs1,IFstage_Rs2,ALustage_Rs1,ALustage_Rs2;
+input CLK,RESET,LOAD_SIG;
+input [4:0] MEM_Rd,ALU_RS1,ALU_RS2;
 
-output reg enable_rs1_forward_from_wb,enable_rs2_forward_from_wb,enable_bubble;
+output reg FRWD_RS1_WB,FRWD_RS2_WB,BUBBLE;
 
-wire [4:0] if_rs1_xnor_wire,if_rs2_xnor_wire,alu_rs1_xnor_wire,alu_rs2_xnor_wire;
-wire if_rs_1comparing,if_rs_2comparing,alu_rs1comparing,alu_rs2comparing,buble;
-
-// Has to remove this part additional beacuse alu hazard unit also cover
-// assign #1 if_rs2_xnor_wire=(Memstage_Rd~^IFstage_Rs2);
-// assign #1 if_rs1_xnor_wire=(Memstage_Rd~^IFstage_Rs1);
-// assign #1 if_rs_1comparing= (&if_rs1_xnor_wire);   
-// assign #1 if_rs_2comparing= (&if_rs2_xnor_wire);
+wire [4:0] ALU_RS1_XNOR,ALU_RS2_XNOR;
+wire RS1_COMPARING,RS2_COMPARING,BUBBLE_WR;
 
 //hazard detection (check wether sourse registers and destination registers are equal)
-assign #1 alu_rs1_xnor_wire=(Memstage_Rd~^ALustage_Rs1);   //xnoring
-assign #1 alu_rs2_xnor_wire=(Memstage_Rd~^ALustage_Rs2);   //xnoring
-assign #1 alu_rs1comparing= (&alu_rs1_xnor_wire);          //anding
-assign #1 alu_rs2comparing= (&alu_rs2_xnor_wire);          //anding
-assign #1 buble=alu_rs1comparing | alu_rs2comparing;   //bubble introduced to the pipeline(this is unavoidable)
+assign #1 ALU_RS1_XNOR=(MEM_Rd~^ALU_RS1);   //xnoring
+assign #1 ALU_RS2_XNOR=(MEM_Rd~^ALU_RS2);   //xnoring
+assign #1 RS1_COMPARING= (&ALU_RS1_XNOR);          //anding
+assign #1 RS2_COMPARING= (&ALU_RS2_XNOR);          //anding
+assign #1 BUBBLE_WR=RS1_COMPARING | RS2_COMPARING;   //bubble introduced to the pipeline(this is unavoidable)
 
-always @(posedge clk) begin
+always @(posedge CLK) begin
     #1                                                //combinational logic delay
-    if (load_signal) begin
-        enable_rs1_forward_from_wb=alu_rs1comparing;
-        enable_rs2_forward_from_wb=alu_rs2comparing;
-        enable_bubble=buble;
+    if (LOAD_SIG) begin
+        FRWD_RS1_WB=RS1_COMPARING;
+        FRWD_RS2_WB=RS2_COMPARING;
+        BUBBLE=BUBBLE_WR;
     end
     else begin
-        enable_rs1_forward_from_wb=1'b0;
-        enable_rs2_forward_from_wb=1'b0;
-        enable_bubble=1'b0;    
+        FRWD_RS1_WB=1'b0;
+        FRWD_RS2_WB=1'b0;
+        BUBBLE=1'b0;    
     end
     
 end
 
-always @(reset) begin
-    if (reset) begin
-        enable_rs1_forward_from_wb=1'b0;
-        enable_rs2_forward_from_wb=1'b0;
-        enable_bubble=1'b0;
+always @(RESET) begin
+    if (RESET) begin
+        FRWD_RS1_WB=1'b0;
+        FRWD_RS2_WB=1'b0;
+        BUBBLE=1'b0;
     end
 end
 endmodule
