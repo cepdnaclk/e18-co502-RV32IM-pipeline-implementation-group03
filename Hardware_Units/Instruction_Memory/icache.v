@@ -84,7 +84,7 @@ module icache (
     // Always block to do the tag comparision and validation
     always @(ivalid, block_tag, block_instruction, instruction_tag, selected_instruction) begin
         
-        #1 // Latency for tag comparision
+        #5 // Latency for tag comparision
 
         if((instruction_tag == block_tag) && (ivalid == 1'b1)) begin
             ihit = 1'b1;
@@ -114,7 +114,7 @@ module icache (
     // Write the instruction block to the cache
     always @(posedge clk) begin
         if (!imem_busywait && !ihit) begin
-            #1
+            #2
             icache_mem[index][0] = 1'b1; // set valid bit to high
             icache_mem[index][3:1] = instruction_tag; 
             icache_mem[index][131:4] = imem_readblock;

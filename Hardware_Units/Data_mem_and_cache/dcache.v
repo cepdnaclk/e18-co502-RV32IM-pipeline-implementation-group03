@@ -110,7 +110,7 @@ module dcache (
 
     //Detecting whether a hit or a miss
     always @ (MEM_ADDRESS,DATABLOCK) begin
-        #0.9
+        #5
         if((tag == TAGCache) && VALID) begin
             HIT = 1'b1;
         end
