@@ -6,20 +6,21 @@ module instruction_fetch_module (
     instruction_mem_busywait,
     data_mem_busywait,
     jump_branch_signal,
+    Jump_Branch_PC,
     PC,
-    INCREMENTED_PC_by_four,
-    Jump_Branch_PC
+    incremented_PC_by_four,
+    busywait
 );
 
-output reg [31:0] PC, INCREMENTED_PC_by_four;
+output reg [31:0] PC, incremented_PC_by_four;
 input wire clk, reset, instruction_mem_busywait, data_mem_busywait, jump_branch_signal;
 input wire [31:0] Jump_Branch_PC;
 
-wire busywait;
+output wire busywait;
 
 
 // busywait signal enable whenever data memmory busywait or instruction memory busywait enables
-or(busywait,instruction_mem_busywait,data_mem_busywait);
+or(busywait, instruction_mem_busywait, data_mem_busywait);
 
 
 always @(reset) begin //set the pc value depend on the reset to start the programme
@@ -29,7 +30,7 @@ end
 // incrementing PC by 4 to get next PC value
 always @(PC) begin
     #2                              //!adder delay
-    INCREMENTED_PC_by_four = PC+4;
+    incremented_PC_by_four = PC+4;
 end
 
 
@@ -41,7 +42,7 @@ always @(posedge clk) begin    //update the pc value depend on the positive cloc
                 PC = Jump_Branch_PC;
             end
             1'b0:begin
-                PC = INCREMENTED_PC_by_four;
+                PC = incremented_PC_by_four;
             end
         endcase
     end

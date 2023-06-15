@@ -48,7 +48,7 @@ end
 // timing ????
 always @(posedge CLK) begin
     if(!reset & !busywait) begin
-        #1;
+        #3;
         OUT_write_addr <= IN_write_addr;
         OUT_mux4_out <= IN_mux4_out;
         OUT_data2 <= IN_data2;

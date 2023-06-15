@@ -109,7 +109,7 @@ module pipeline2(
     always @(posedge CLK)
     begin
         if (!reset & !busywait) begin
-            #1;
+            #3;
             OUT_write_add <= IN_write_addr;
             OUT_funct3 <= IN_funct3;
             OUT_pc_plus_4 <= IN_pc_plus_4;
